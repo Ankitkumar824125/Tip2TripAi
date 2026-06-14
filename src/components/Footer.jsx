@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Send, Instagram, Linkedin, Twitter, Sparkles, Check } from 'lucide-react';
 
 export default function Footer() {

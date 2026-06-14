@@ -1,76 +1,58 @@
-import React, { useState } from 'react';
-import { Heart, MessageSquare, Send, Sparkles, Image, Globe, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Heart, MessageSquare, Send, Image, Check } from 'lucide-react';
 
 export default function CommunityFeed() {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      name: 'Simran Gill',
-      handle: '@simi_wanders',
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120',
-      time: '2 hours ago',
-      content: 'Just arrived in Goa! 🌴 The AI-suggested hostel is absolute gold — met 3 awesome travel buddies in the lobby within 10 minutes. Hit Arambol sunset drums tomorrow if anyone wants to join! 🛵🌊',
-      location: 'Arambol, Goa',
-      image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500',
-      likes: 142,
-      comments: 24,
-      liked: false
-    },
-    {
-      id: 2,
-      name: 'Rohan Verma',
-      handle: '@rohan_v',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120',
-      time: '5 hours ago',
-      content: 'Ladakh roadtrip Day 2: The mountain passes are full blast. Road is clear and renting the Royal Enfield bikes with the split cost group worked out so cheap! Splitting everything on Tip2Trip split wallet is clean. 🏔️🏍️',
-      location: 'Khardung La, Leh',
-      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500',
-      likes: 389,
-      comments: 56,
-      liked: true
-    }
-  ]);
-
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [newPostContent, setNewPostContent] = useState('');
   const [newPostLocation, setNewPostLocation] = useState('');
   const [successToast, setSuccessToast] = useState(false);
 
+  useEffect(() => {
+    fetch('/api/posts')
+      .then(res => res.json())
+      .then(data => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching posts:', err);
+        setLoading(false);
+      });
+  }, []);
+
   const handleLike = (id) => {
-    setPosts(posts.map(post => {
-      if (post.id === id) {
-        return {
-          ...post,
-          likes: post.liked ? post.likes - 1 : post.likes + 1,
-          liked: !post.liked
-        };
-      }
-      return post;
-    }));
+    fetch(`/api/posts/${id}/like`, { method: 'POST' })
+      .then(res => res.json())
+      .then(updatedPost => {
+        setPosts(posts.map(post => post.id === id ? updatedPost : post));
+      })
+      .catch(err => console.error('Error liking post:', err));
   };
 
   const handleCreatePost = (e) => {
     e.preventDefault();
     if (newPostContent.trim() === '') return;
 
-    const newPost = {
-      id: posts.length + 1,
-      name: 'You (Traveler)',
-      handle: '@current_user',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
-      time: 'Just now',
-      content: newPostContent,
-      location: newPostLocation || 'Everywhere',
-      image: null, // text post
-      likes: 0,
-      comments: 0,
-      liked: false
-    };
-
-    setPosts([newPost, ...posts]);
-    setNewPostContent('');
-    setNewPostLocation('');
-    setSuccessToast(true);
-    setTimeout(() => setSuccessToast(false), 3000);
+    fetch('/api/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: newPostContent,
+        location: newPostLocation
+      })
+    })
+      .then(res => res.json())
+      .then(newPost => {
+        setPosts([newPost, ...posts]);
+        setNewPostContent('');
+        setNewPostLocation('');
+        setSuccessToast(true);
+        setTimeout(() => setSuccessToast(false), 3000);
+      })
+      .catch(err => console.error('Error creating post:', err));
   };
 
   return (
@@ -151,7 +133,12 @@ export default function CommunityFeed() {
 
         {/* Posts List */}
         <div className="space-y-6">
-          {posts.map(post => (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-green"></div>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Loading tribe broadcast feed...</p>
+            </div>
+          ) : posts.map(post => (
             <div
               key={post.id}
               className="glass-card border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-md text-left space-y-4 hover:scale-[1.005] transition-all duration-300"

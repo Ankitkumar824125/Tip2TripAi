@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Sparkles, Calendar, Receipt, MessageCircleCode, ShieldAlert, Eye, ArrowUpRight } from 'lucide-react';
 
 export default function Features() {

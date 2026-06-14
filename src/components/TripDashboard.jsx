@@ -1,81 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { CloudRain, Sun, CloudSun, AlertTriangle, ShieldCheck, DollarSign, Plus, Smile, Meh, Frown, Sparkles, PlaneTakeoff } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CloudRain, Sun, CloudSun, AlertTriangle, ShieldCheck, Plus, Smile, Meh, Frown, Sparkles, PlaneTakeoff } from 'lucide-react';
 
 export default function TripDashboard() {
   const [activeDestination, setActiveDestination] = useState('Goa');
-  const [budgetLimit, setBudgetLimit] = useState(40000);
-  const [budgetSpent, setBudgetSpent] = useState(16000);
+  const [tripData, setTripData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState('');
   const [expenseTitle, setExpenseTitle] = useState('');
-  const [vibeMood, setVibeMood] = useState('Happy');
-  const [recentExpenses, setRecentExpenses] = useState([
-    { title: 'Anjuna Beach Shack Stay', amount: 8500, category: 'Stay' },
-    { title: 'Scuba Diving Grand Island', amount: 3500, category: 'Activities' },
-    { title: 'Goa Coastal Dinners', amount: 4000, category: 'Food' }
-  ]);
 
   // Read destination changes from the Hero planner input
   useEffect(() => {
     const handlePlannerUpdate = () => {
       const savedDest = localStorage.getItem('hero_destination');
       if (savedDest) {
-        // Find if it matches one of our dashboards or just capitalize it
         const formatted = savedDest.charAt(0).toUpperCase() + savedDest.slice(1).toLowerCase();
-        if (['Goa', 'Kasol', 'Leh'].includes(formatted)) {
-          setActiveDestination(formatted);
-        } else {
-          setActiveDestination('Goa'); // fallback or dynamic override
-        }
+        setActiveDestination(formatted);
       }
     };
     window.addEventListener('heroPlannerUpdated', handlePlannerUpdate);
     return () => window.removeEventListener('heroPlannerUpdated', handlePlannerUpdate);
   }, []);
 
-  const destinationData = {
-    Goa: {
-      weather: { temp: '31°C', condition: 'Sunny', icon: <Sun className="text-amber-500 animate-spin-slow" size={24} /> },
-      safety: { status: 'Clear', desc: 'No active weather warnings. Standard tides.', type: 'ok' },
-      timeline: [
-        { day: 'Day 1', title: 'Sunset Shack Party & Chill', activity: 'Arrive in North Goa, check in, check out shacks. Splitting taxi with Kabir.', time: '04:00 PM', alert: null },
-        { day: 'Day 2', title: 'Panaji Spice Plantation Crawl', activity: 'Trek around local spice gardens and eat local traditional vindaloo. Dress code: light cotton.', time: '09:00 AM', alert: null },
-        { day: 'Day 3', title: 'Dudhsagar Waterfall Hike', activity: 'Adventure trek through forest paths and high streams. Waterproof shoes required.', time: '08:00 AM', alert: 'High water warning: Stick to marked trails!' }
-      ]
-    },
-    Kasol: {
-      weather: { temp: '16°C', condition: 'Cloudy', icon: <CloudSun className="text-sky-400" size={24} /> },
-      safety: { status: 'Caution', desc: 'Heavy rains expected tomorrow evening. Avoid riverbed campsites.', type: 'warn' },
-      timeline: [
-        { day: 'Day 1', title: 'Chalal Trail Walk', activity: 'Walk along the Parvati River, local pine forest paths. Splitting café tab with Riya.', time: '02:00 PM', alert: null },
-        { day: 'Day 2', title: 'Kheerganga Trek Ascent', activity: 'Climb 12km through alpine meadows and local hot water springs.', time: '07:00 AM', alert: 'Trail warning: Wet slippery rocks near the falls' },
-        { day: 'Day 3', title: 'Tosh Valley Exploration', activity: 'Visit the high-altitude remote wooden village and cafés.', time: '10:00 AM', alert: null }
-      ]
-    },
-    Leh: {
-      weather: { temp: '14°C', condition: 'Clear Skies', icon: <Sun className="text-amber-500 animate-spin-slow" size={24} /> },
-      safety: { status: 'Clear', desc: 'Khardung La Pass is open. Border permits operating normally.', type: 'ok' },
-      timeline: [
-        { day: 'Day 1', title: 'Leh Market Walk & Acclimatization', activity: 'Wander old palace fort districts. Look for local sketch artists. Ride with Aarav.', time: '06:00 PM', alert: null },
-        { day: 'Day 2', title: 'Pangong Lake Bike Ride', activity: 'Ride 140km through high mountain passes. Keep hydrated at all times.', time: '06:30 AM', alert: 'Altitude alert: Rest if feeling dizzy or short of breath' },
-        { day: 'Day 3', title: 'Magnetic Hill & Confluence Vibe', activity: 'Explore local monasteries, Magnetic Hill, and Indus-Zanskar confluence.', time: '09:00 AM', alert: null }
-      ]
-    }
-  };
-
-  const currentData = destinationData[activeDestination] || destinationData.Goa;
+  // Fetch trip data when activeDestination changes
+  useEffect(() => {
+    let isMounted = true;
+    Promise.resolve().then(() => {
+      if (isMounted) setLoading(true);
+    });
+    fetch(`/api/trips/${activeDestination}`)
+      .then(res => res.json())
+      .then(data => {
+        if (isMounted) {
+          setTripData(data);
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching trip details:', err);
+        if (isMounted) setLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [activeDestination]);
 
   const handleAddExpense = (e) => {
     e.preventDefault();
     const parsedAmount = parseFloat(expenseAmount);
     if (!isNaN(parsedAmount) && parsedAmount > 0 && expenseTitle.trim() !== '') {
-      setBudgetSpent(prev => Math.min(prev + parsedAmount, budgetLimit * 1.5));
-      setRecentExpenses(prev => [
-        { title: expenseTitle, amount: parsedAmount, category: 'Extra' },
-        ...prev
-      ]);
-      setExpenseAmount('');
-      setExpenseTitle('');
+      fetch(`/api/trips/${activeDestination}/expenses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: expenseTitle,
+          amount: parsedAmount
+        })
+      })
+        .then(res => res.json())
+        .then(updatedTrip => {
+          setTripData(updatedTrip);
+          setExpenseAmount('');
+          setExpenseTitle('');
+        })
+        .catch(err => console.error('Error adding expense:', err));
     }
+  };
+
+  const handleSetVibeMood = (mood) => {
+    fetch(`/api/trips/${activeDestination}/mood`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        vibeMood: mood
+      })
+    })
+      .then(res => res.json())
+      .then(updatedTrip => {
+        setTripData(updatedTrip);
+      })
+      .catch(err => console.error('Error setting mood:', err));
+  };
+
+  const getWeatherIcon = (condition) => {
+    switch (condition?.toLowerCase()) {
+      case 'sunny':
+      case 'clear':
+      case 'clear skies':
+        return <Sun className="text-amber-500 animate-spin-slow" size={24} />;
+      case 'cloudy':
+      case 'mostly cloudy':
+        return <CloudSun className="text-sky-400" size={24} />;
+      case 'rainy':
+      case 'showers':
+        return <CloudRain className="text-blue-400" size={24} />;
+      default:
+        return <Sun className="text-amber-500" size={24} />;
+    }
+  };
+
+  const budgetLimit = tripData ? tripData.budgetLimit : 40000;
+  const budgetSpent = tripData ? tripData.budgetSpent : 0;
+  const vibeMood = tripData ? tripData.vibeMood : 'Chill';
+  const recentExpenses = tripData ? tripData.recentExpenses : [];
+  const currentData = tripData || {
+    weather: { temp: '--', condition: 'Loading' },
+    safety: { status: 'Loading', desc: '', type: 'ok' },
+    timeline: []
   };
 
   const getProgressWidth = () => {
@@ -131,14 +165,22 @@ export default function TripDashboard() {
           
           {/* Timeline Feed (Left) */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="glass-card border border-white/20 rounded-3xl p-6 md:p-8 shadow-lg text-left">
+            <div className="glass-card border border-white/20 rounded-3xl p-6 md:p-8 shadow-lg text-left relative min-h-[300px]">
+              {loading && (
+                <div className="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-30 rounded-3xl flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-green"></div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-bold">Updating dashboard...</p>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-slate-800/80">
                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                   <PlaneTakeoff className="text-brand-green dark:text-brand-yellow" />
                   Journey Roadmap: {activeDestination}
                 </h3>
                 <span className="bg-brand-green/10 text-brand-green dark:bg-brand-yellow/10 dark:text-brand-yellow px-3 py-1 rounded-full text-xs font-black uppercase">
-                  3 Days Active
+                  {currentData.timeline.length} Days Active
                 </span>
               </div>
 
@@ -201,7 +243,7 @@ export default function TripDashboard() {
                   <span className="text-2xl font-black text-slate-900 dark:text-white">
                     {currentData.weather.temp}
                   </span>
-                  {currentData.weather.icon}
+                  {getWeatherIcon(currentData.weather.condition)}
                 </div>
               </div>
 
@@ -306,7 +348,7 @@ export default function TripDashboard() {
 
               <div className="flex justify-around items-center py-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                 <button
-                  onClick={() => setVibeMood('Awesome')}
+                  onClick={() => handleSetVibeMood('Awesome')}
                   className={`p-2 rounded-xl transition-all ${
                     vibeMood === 'Awesome'
                       ? 'bg-brand-green/20 dark:bg-brand-yellow/20 scale-110 text-brand-green dark:text-brand-yellow'
@@ -316,7 +358,7 @@ export default function TripDashboard() {
                   <Smile size={24} className="stroke-[2.5]" />
                 </button>
                 <button
-                  onClick={() => setVibeMood('Chill')}
+                  onClick={() => handleSetVibeMood('Chill')}
                   className={`p-2 rounded-xl transition-all ${
                     vibeMood === 'Chill'
                       ? 'bg-brand-green/20 dark:bg-brand-yellow/20 scale-110 text-brand-green dark:text-brand-yellow'
@@ -326,7 +368,7 @@ export default function TripDashboard() {
                   <Meh size={24} className="stroke-[2.5]" />
                 </button>
                 <button
-                  onClick={() => setVibeMood('Tired')}
+                  onClick={() => handleSetVibeMood('Tired')}
                   className={`p-2 rounded-xl transition-all ${
                     vibeMood === 'Tired'
                       ? 'bg-brand-green/20 dark:bg-brand-yellow/20 scale-110 text-brand-green dark:text-brand-yellow'
@@ -340,7 +382,7 @@ export default function TripDashboard() {
               {/* Vibe Status Box */}
               <div className="mt-4 p-3 rounded-xl bg-brand-green/10 text-brand-green dark:bg-brand-yellow/10 dark:text-brand-yellow border border-brand-green/10 text-xs font-black text-center flex items-center justify-center gap-1.5 uppercase tracking-wide">
                 <Sparkles size={12} className="animate-spin-slow" />
-                Vibe Level: {vibeMood === 'Awesome' ? '🤩 AMAZING!' : vibeMood === 'Chill' ? '🧘 COZY & CHILL' : '😴 NEEDS ESPRESSO'}
+                Vibe Level: {vibeMood === 'Awesome' || vibeMood === 'Happy' ? '🤩 AMAZING!' : vibeMood === 'Chill' ? '🧘 COZY & CHILL' : '😴 NEEDS ESPRESSO'}
               </div>
             </div>
 

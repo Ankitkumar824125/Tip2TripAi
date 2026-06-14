@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Compass, Users, Sparkles, CreditCard, ArrowRight, Check } from 'lucide-react';
 
 export default function HowItWorks() {

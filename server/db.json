@@ -1,0 +1,393 @@
+{
+  "buddies": [
+    {
+      "id": 1,
+      "name": "Riya Sharma",
+      "age": 23,
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+      "destination": "Goa",
+      "match": 98,
+      "bio": "Wanderer, café hopper, and sunset lover. Looking for someone to hit Vagator beach shacks and Anjuna clubs!",
+      "interests": [
+        "Vlogging",
+        "Surfing",
+        "Nightlife"
+      ],
+      "liked": true,
+      "connected": true
+    },
+    {
+      "id": 2,
+      "name": "Kabir Mehta",
+      "age": 25,
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+      "destination": "Kasol",
+      "match": 95,
+      "bio": "Trekked Kheerganga thrice. Looking for buddies to explore secret waterfalls and chill at Parvati valley.",
+      "interests": [
+        "Trekking",
+        "Campfires",
+        "Photography"
+      ],
+      "liked": false,
+      "connected": true
+    },
+    {
+      "id": 3,
+      "name": "Tanya Sen",
+      "age": 22,
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      "destination": "Munnar",
+      "match": 92,
+      "bio": "Tea garden enthusiast and nature lover. Planning a detailed spice plantation crawl and Kolukkumalai sunrise trek.",
+      "interests": [
+        "Trekking",
+        "Gardening",
+        "Photography"
+      ],
+      "liked": false,
+      "connected": true
+    },
+    {
+      "id": 4,
+      "name": "Aarav Goel",
+      "age": 26,
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",
+      "destination": "Leh Ladakh",
+      "match": 89,
+      "bio": "Road trip junkie. Let's rent a Royal Enfield Bullet and ride through Khardung La Pass to Pangong Lake!",
+      "interests": [
+        "Roadtrips",
+        "Biking",
+        "Hiking"
+      ],
+      "liked": false,
+      "connected": true
+    },
+    {
+      "id": 5,
+      "name": "Meera Iyer",
+      "age": 24,
+      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150",
+      "destination": "Goa",
+      "match": 91,
+      "bio": "Yoga teacher in training. Seeking a buddy for spiritual retreats, scuba diving in Grand Island, and local coastal food.",
+      "interests": [
+        "Yoga",
+        "Shacks",
+        "Scuba Diving"
+      ],
+      "liked": false,
+      "connected": true
+    },
+    {
+      "id": 6,
+      "name": "Rohan Das",
+      "age": 24,
+      "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150",
+      "destination": "Udaipur",
+      "match": 88,
+      "bio": "Graphic designer who loves capturing heritage. Let's bike around Lake Pichola and sketch local palaces.",
+      "interests": [
+        "Heritage",
+        "Sketching",
+        "Street Food"
+      ],
+      "liked": false,
+      "connected": true
+    }
+  ],
+  "posts": [
+    {
+      "id": 3,
+      "name": "You (Traveler)",
+      "handle": "@current_user",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120",
+      "time": "Just now",
+      "content": "Exploring kasol mountains!",
+      "location": "Everywhere",
+      "image": null,
+      "likes": 0,
+      "comments": 0,
+      "liked": false
+    },
+    {
+      "id": 1,
+      "name": "Simran Gill",
+      "handle": "@simi_wanders",
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120",
+      "time": "2 hours ago",
+      "content": "Just arrived in Goa! 🌴 The AI-suggested hostel is absolute gold — met 3 awesome travel buddies in the lobby within 10 minutes. Hit Arambol sunset drums tomorrow if anyone wants to join! 🛵🌊",
+      "location": "Arambol, Goa",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500",
+      "likes": 142,
+      "comments": 24,
+      "liked": false
+    },
+    {
+      "id": 2,
+      "name": "Rohan Verma",
+      "handle": "@rohan_v",
+      "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120",
+      "time": "5 hours ago",
+      "content": "Ladakh roadtrip Day 2: The mountain passes are full blast. Road is clear and renting the Royal Enfield bikes with the split cost group worked out so cheap! Splitting everything on Tip2Trip split wallet is clean. 🏔️🏍️",
+      "location": "Khardung La, Leh",
+      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500",
+      "likes": 389,
+      "comments": 56,
+      "liked": true
+    }
+  ],
+  "trips": {
+    "Goa": {
+      "budgetLimit": 40000,
+      "budgetSpent": 17200,
+      "vibeMood": "Chill",
+      "weather": {
+        "temp": "31°C",
+        "condition": "Sunny"
+      },
+      "safety": {
+        "status": "Clear",
+        "desc": "No active weather warnings. Standard tides.",
+        "type": "ok"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Sunset Shack Party & Chill",
+          "activity": "Arrive in North Goa, check in, check out shacks. Splitting taxi with Kabir.",
+          "time": "04:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Panaji Spice Plantation Crawl",
+          "activity": "Trek around local spice gardens and eat local traditional vindaloo. Dress code: light cotton.",
+          "time": "09:00 AM",
+          "alert": null
+        },
+        {
+          "day": "Day 3",
+          "title": "Dudhsagar Waterfall Hike",
+          "activity": "Adventure trek through forest paths and high streams. Waterproof shoes required.",
+          "time": "08:00 AM",
+          "alert": "High water warning: Stick to marked trails!"
+        }
+      ],
+      "recentExpenses": [
+        {
+          "title": "Lunch at shacks",
+          "amount": 1200,
+          "category": "Extra"
+        },
+        {
+          "title": "Anjuna Beach Shack Stay",
+          "amount": 8500,
+          "category": "Stay"
+        },
+        {
+          "title": "Scuba Diving Grand Island",
+          "amount": 3500,
+          "category": "Activities"
+        },
+        {
+          "title": "Goa Coastal Dinners",
+          "amount": 4000,
+          "category": "Food"
+        }
+      ]
+    },
+    "Kasol": {
+      "budgetLimit": 30000,
+      "budgetSpent": 12000,
+      "vibeMood": "Chill",
+      "weather": {
+        "temp": "16°C",
+        "condition": "Cloudy"
+      },
+      "safety": {
+        "status": "Caution",
+        "desc": "Heavy rains expected tomorrow evening. Avoid riverbed campsites.",
+        "type": "warn"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Chalal Trail Walk",
+          "activity": "Walk along the Parvati River, local pine forest paths. Splitting café tab with Riya.",
+          "time": "02:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Kheerganga Trek Ascent",
+          "activity": "Climb 12km through alpine meadows and local hot water springs.",
+          "time": "07:00 AM",
+          "alert": "Trail warning: Wet slippery rocks near the falls"
+        },
+        {
+          "day": "Day 3",
+          "title": "Tosh Valley Exploration",
+          "activity": "Visit the high-altitude remote wooden village and cafés.",
+          "time": "10:00 AM",
+          "alert": null
+        }
+      ],
+      "recentExpenses": [
+        {
+          "title": "Chalal Cafe Tab",
+          "amount": 2500,
+          "category": "Food"
+        },
+        {
+          "title": "Kheerganga Guide Fee",
+          "amount": 4500,
+          "category": "Activities"
+        }
+      ]
+    },
+    "Leh": {
+      "budgetLimit": 50000,
+      "budgetSpent": 20000,
+      "vibeMood": "Chill",
+      "weather": {
+        "temp": "14°C",
+        "condition": "Clear Skies"
+      },
+      "safety": {
+        "status": "Clear",
+        "desc": "Khardung La Pass is open. Border permits operating normally.",
+        "type": "ok"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Leh Market Walk & Acclimatization",
+          "activity": "Wander old palace fort districts. Look for local sketch artists. Ride with Aarav.",
+          "time": "06:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Pangong Lake Bike Ride",
+          "activity": "Ride 140km through high mountain passes. Keep hydrated at all times.",
+          "time": "06:30 AM",
+          "alert": "Altitude alert: Rest if feeling dizzy or short of breath"
+        },
+        {
+          "day": "Day 3",
+          "title": "Magnetic Hill & Confluence Vibe",
+          "activity": "Explore local monasteries, Magnetic Hill, and Indus-Zanskar confluence.",
+          "time": "09:00 AM",
+          "alert": null
+        }
+      ],
+      "recentExpenses": [
+        {
+          "title": "Royal Enfield Rental",
+          "amount": 12000,
+          "category": "Transport"
+        },
+        {
+          "title": "Leh Palace Entry Permits",
+          "amount": 3000,
+          "category": "Permits"
+        }
+      ]
+    },
+    "Gaya": {
+      "budgetLimit": 40000,
+      "budgetSpent": 700,
+      "vibeMood": "Chill",
+      "weather": {
+        "temp": "25°C",
+        "condition": "Clear"
+      },
+      "safety": {
+        "status": "Clear",
+        "desc": "No active weather warnings.",
+        "type": "ok"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Welcome to Gaya",
+          "activity": "Arrive in Gaya, check into your accommodation, and meet local travelers.",
+          "time": "02:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Local Sightseeing & Trekking",
+          "activity": "Explore the highlights of the area, cafe crawl, and capture scenery.",
+          "time": "10:00 AM",
+          "alert": null
+        },
+        {
+          "day": "Day 3",
+          "title": "Departing Journey",
+          "activity": "Pack up, grab souvenirs, and head back home with memories.",
+          "time": "11:00 AM",
+          "alert": null
+        }
+      ],
+      "recentExpenses": [
+        {
+          "title": "vegetables",
+          "amount": 200,
+          "category": "Extra"
+        },
+        {
+          "title": "fruit",
+          "amount": 500,
+          "category": "Extra"
+        }
+      ]
+    },
+    "Rafiganj": {
+      "budgetLimit": 40000,
+      "budgetSpent": 5000,
+      "vibeMood": "Awesome",
+      "weather": {
+        "temp": "25°C",
+        "condition": "Clear"
+      },
+      "safety": {
+        "status": "Clear",
+        "desc": "No active weather warnings.",
+        "type": "ok"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Welcome to Rafiganj",
+          "activity": "Arrive in Rafiganj, check into your accommodation, and meet local travelers.",
+          "time": "02:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Local Sightseeing & Trekking",
+          "activity": "Explore the highlights of the area, cafe crawl, and capture scenery.",
+          "time": "10:00 AM",
+          "alert": null
+        },
+        {
+          "day": "Day 3",
+          "title": "Departing Journey",
+          "activity": "Pack up, grab souvenirs, and head back home with memories.",
+          "time": "11:00 AM",
+          "alert": null
+        }
+      ],
+      "recentExpenses": [
+        {
+          "title": "shopping",
+          "amount": 5000,
+          "category": "Extra"
+        }
+      ]
+    }
+  }
+}

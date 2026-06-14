@@ -1,90 +1,43 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, MapPin, Sparkles, MessageCircle, Heart, UserCheck } from 'lucide-react';
 
 export default function TravelBuddy() {
   const [selectedDest, setSelectedDest] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [connectedIds, setConnectedIds] = useState([]);
-  const [likes, setLikes] = useState({});
+  const [buddies, setBuddies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const destinations = ['All', 'Goa', 'Kasol', 'Munnar', 'Leh Ladakh', 'Udaipur'];
 
-  const buddies = [
-    {
-      id: 1,
-      name: 'Riya Sharma',
-      age: 23,
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-      destination: 'Goa',
-      match: 98,
-      bio: 'Wanderer, café hopper, and sunset lover. Looking for someone to hit Vagator beach shacks and Anjuna clubs!',
-      interests: ['Vlogging', 'Surfing', 'Nightlife']
-    },
-    {
-      id: 2,
-      name: 'Kabir Mehta',
-      age: 25,
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-      destination: 'Kasol',
-      match: 95,
-      bio: 'Trekked Kheerganga thrice. Looking for buddies to explore secret waterfalls and chill at Parvati valley.',
-      interests: ['Trekking', 'Campfires', 'Photography']
-    },
-    {
-      id: 3,
-      name: 'Tanya Sen',
-      age: 22,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-      destination: 'Munnar',
-      match: 92,
-      bio: 'Tea garden enthusiast and nature lover. Planning a detailed spice plantation crawl and Kolukkumalai sunrise trek.',
-      interests: ['Trekking', 'Gardening', 'Photography']
-    },
-    {
-      id: 4,
-      name: 'Aarav Goel',
-      age: 26,
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-      destination: 'Leh Ladakh',
-      match: 89,
-      bio: 'Road trip junkie. Let\'s rent a Royal Enfield Bullet and ride through Khardung La Pass to Pangong Lake!',
-      interests: ['Roadtrips', 'Biking', 'Hiking']
-    },
-    {
-      id: 5,
-      name: 'Meera Iyer',
-      age: 24,
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-      destination: 'Goa',
-      match: 91,
-      bio: 'Yoga teacher in training. Seeking a buddy for spiritual retreats, scuba diving in Grand Island, and local coastal food.',
-      interests: ['Yoga', 'Shacks', 'Scuba Diving']
-    },
-    {
-      id: 6,
-      name: 'Rohan Das',
-      age: 24,
-      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150',
-      destination: 'Udaipur',
-      match: 88,
-      bio: 'Graphic designer who loves capturing heritage. Let\'s bike around Lake Pichola and sketch local palaces.',
-      interests: ['Heritage', 'Sketching', 'Street Food']
-    }
-  ];
+  useEffect(() => {
+    fetch('/api/buddies')
+      .then(res => res.json())
+      .then(data => {
+        setBuddies(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching buddies:', err);
+        setLoading(false);
+      });
+  }, []);
 
   const handleConnect = (id) => {
-    if (connectedIds.includes(id)) {
-      setConnectedIds(connectedIds.filter(cid => cid !== id));
-    } else {
-      setConnectedIds([...connectedIds, id]);
-    }
+    fetch(`/api/buddies/${id}/connect`, { method: 'POST' })
+      .then(res => res.json())
+      .then(updatedBuddy => {
+        setBuddies(buddies.map(b => b.id === id ? updatedBuddy : b));
+      })
+      .catch(err => console.error('Error connecting:', err));
   };
 
   const handleLike = (id) => {
-    setLikes(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    fetch(`/api/buddies/${id}/like`, { method: 'POST' })
+      .then(res => res.json())
+      .then(updatedBuddy => {
+        setBuddies(buddies.map(b => b.id === id ? updatedBuddy : b));
+      })
+      .catch(err => console.error('Error liking:', err));
   };
 
   const filteredBuddies = buddies.filter(buddy => {
@@ -143,12 +96,16 @@ export default function TravelBuddy() {
           ))}
         </div>
 
-        {/* Buddies Grid */}
-        {filteredBuddies.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-green"></div>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Loading travel buddies...</p>
+          </div>
+        ) : filteredBuddies.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredBuddies.map(buddy => {
-              const isConnected = connectedIds.includes(buddy.id);
-              const isLiked = likes[buddy.id];
+              const isConnected = buddy.connected;
+              const isLiked = buddy.liked;
 
               return (
                 <div

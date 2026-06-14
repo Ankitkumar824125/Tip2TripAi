@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
 
 export default function Navbar({ darkMode, toggleDarkMode }) {

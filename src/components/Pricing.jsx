@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Check, Info, Sparkles } from 'lucide-react';
 
 export default function Pricing() {

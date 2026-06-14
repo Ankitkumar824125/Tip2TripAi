@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Sparkles, Users, ArrowRight, MapPin, Calendar, DollarSign, Search } from 'lucide-react';
+import { useState } from 'react';
+import { Sparkles, Users, MapPin, Calendar, DollarSign, Search } from 'lucide-react';
 
 export default function Hero() {
   const [destination, setDestination] = useState('');
