@@ -14,6 +14,20 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
+// Friendly welcome route for server root
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'Tip2Trip Backend API Server',
+    message: 'Welcome! The backend service is running successfully. Access the frontend app on http://localhost:5173',
+    endpoints: {
+      buddies: '/api/buddies',
+      posts: '/api/posts',
+      tripDetails: '/api/trips/:destination'
+    }
+  });
+});
+
 // ------------------- HELPERS & SEED DATA GENERATORS -------------------
 
 // Predefined landmark itineraries for popular destinations
