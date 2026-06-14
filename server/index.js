@@ -12,7 +12,8 @@ const app = express();
 const PORT = 5000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Friendly welcome route for server root
 app.get('/', (req, res) => {
@@ -371,6 +372,129 @@ app.post('/api/trips/:destination/mood', async (req, res) => {
   db.trips[destination].vibeMood = vibeMood;
   await writeDB(db);
   res.json(db.trips[destination]);
+});
+
+
+// ------------------- AUTHENTICATION ENDPOINTS -------------------
+
+// Sign Up
+app.post('/api/auth/signup', async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email, and password are required' });
+  }
+
+  const db = await readDB();
+  if (!db.users) db.users = [];
+
+  const userExists = db.users.some(u => u.email.toLowerCase() === email.toLowerCase());
+  if (userExists) {
+    return res.status(400).json({ error: 'User with this email already exists' });
+  }
+
+  const newUser = {
+    id: db.users.length > 0 ? Math.max(...db.users.map(u => u.id)) + 1 : 1,
+    name,
+    email,
+    password, // For a local mock/demo, plain-text is standard
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150', // default avatar
+    bio: 'Traveler, tribe member, and wanderer.',
+    phone: '',
+    location: ''
+  };
+
+  db.users.push(newUser);
+  await writeDB(db);
+
+  // Generate a mock auth token
+  const token = `mock-token-${newUser.id}`;
+  
+  // Exclude password in response
+  const userWithoutPassword = { ...newUser };
+  delete userWithoutPassword.password;
+  res.status(201).json({ token, user: userWithoutPassword });
+});
+
+// Login
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+
+  const db = await readDB();
+  if (!db.users) db.users = [];
+
+  const user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!user || user.password !== password) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+
+  const token = `mock-token-${user.id}`;
+  const userWithoutPassword = { ...user };
+  delete userWithoutPassword.password;
+  res.json({ token, user: userWithoutPassword });
+});
+
+// Get Current User (Me)
+app.get('/api/auth/me', async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'No authorization token provided' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const userId = parseInt(token.replace('mock-token-', ''));
+
+  if (isNaN(userId)) {
+    return res.status(401).json({ error: 'Invalid authentication token' });
+  }
+
+  const db = await readDB();
+  const user = db.users.find(u => u.id === userId);
+  if (!user) {
+    return res.status(401).json({ error: 'User session expired or not found' });
+  }
+
+  const userWithoutPassword = { ...user };
+  delete userWithoutPassword.password;
+  res.json(userWithoutPassword);
+});
+
+// Update Profile
+app.post('/api/auth/profile', async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'No authorization token provided' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const userId = parseInt(token.replace('mock-token-', ''));
+
+  if (isNaN(userId)) {
+    return res.status(401).json({ error: 'Invalid authentication token' });
+  }
+
+  const { name, bio, phone, location, avatar } = req.body;
+
+  const db = await readDB();
+  const index = db.users.findIndex(u => u.id === userId);
+  if (index === -1) {
+    return res.status(401).json({ error: 'User not found' });
+  }
+
+  const user = db.users[index];
+  if (name !== undefined) user.name = name;
+  if (bio !== undefined) user.bio = bio;
+  if (phone !== undefined) user.phone = phone;
+  if (location !== undefined) user.location = location;
+  if (avatar !== undefined) user.avatar = avatar;
+
+  await writeDB(db);
+
+  const userWithoutPassword = { ...user };
+  delete userWithoutPassword.password;
+  res.json(userWithoutPassword);
 });
 
 // Start the server
