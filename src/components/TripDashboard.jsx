@@ -3,6 +3,8 @@ import { CloudRain, Sun, CloudSun, AlertTriangle, ShieldCheck, Plus, Smile, Meh,
 
 export default function TripDashboard() {
   const [activeDestination, setActiveDestination] = useState('Goa');
+  const [activeDate, setActiveDate] = useState('');
+  const [activeBudget, setActiveBudget] = useState('Standard');
   const [tripData, setTripData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expenseAmount, setExpenseAmount] = useState('');
@@ -16,18 +18,23 @@ export default function TripDashboard() {
         const formatted = savedDest.charAt(0).toUpperCase() + savedDest.slice(1).toLowerCase();
         setActiveDestination(formatted);
       }
+      const savedDate = localStorage.getItem('hero_date');
+      if (savedDate) setActiveDate(savedDate);
+      const savedBudget = localStorage.getItem('hero_budget');
+      if (savedBudget) setActiveBudget(savedBudget);
     };
+    handlePlannerUpdate(); // run once on mount
     window.addEventListener('heroPlannerUpdated', handlePlannerUpdate);
     return () => window.removeEventListener('heroPlannerUpdated', handlePlannerUpdate);
   }, []);
 
-  // Fetch trip data when activeDestination changes
+  // Fetch trip data when activeDestination or activeBudget changes
   useEffect(() => {
     let isMounted = true;
     Promise.resolve().then(() => {
       if (isMounted) setLoading(true);
     });
-    fetch(`/api/trips/${activeDestination}`)
+    fetch(`/api/trips/${activeDestination}?budget=${activeBudget}`)
       .then(res => res.json())
       .then(data => {
         if (isMounted) {
@@ -42,7 +49,7 @@ export default function TripDashboard() {
     return () => {
       isMounted = false;
     };
-  }, [activeDestination]);
+  }, [activeDestination, activeBudget]);
 
   const handleAddExpense = (e) => {
     e.preventDefault();
@@ -174,12 +181,20 @@ export default function TripDashboard() {
                   </div>
                 </div>
               )}
-              <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-slate-800/80">
-                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                  <PlaneTakeoff className="text-brand-green dark:text-brand-yellow" />
-                  Journey Roadmap: {activeDestination}
-                </h3>
-                <span className="bg-brand-green/10 text-brand-green dark:bg-brand-yellow/10 dark:text-brand-yellow px-3 py-1 rounded-full text-xs font-black uppercase">
+              <div className="flex flex-wrap items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-slate-800/80 gap-4">
+                <div>
+                  <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                    <PlaneTakeoff className="text-brand-green dark:text-brand-yellow" />
+                    Journey Roadmap: {activeDestination}
+                  </h3>
+                  {(activeDate || activeBudget) && (
+                    <div className="flex flex-wrap gap-2 mt-1.5 ml-8 text-[11px] font-bold text-slate-500">
+                      {activeDate && <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">📅 Starts: {activeDate}</span>}
+                      {activeBudget && <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">💰 Style: {activeBudget}</span>}
+                    </div>
+                  )}
+                </div>
+                <span className="bg-brand-green/10 text-brand-green dark:bg-brand-yellow/10 dark:text-brand-yellow px-3 py-1 rounded-full text-xs font-black uppercase shrink-0">
                   {currentData.timeline.length} Days Active
                 </span>
               </div>

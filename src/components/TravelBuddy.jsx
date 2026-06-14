@@ -7,9 +7,9 @@ export default function TravelBuddy() {
   const [buddies, setBuddies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const destinations = ['All', 'Goa', 'Kasol', 'Munnar', 'Leh Ladakh', 'Udaipur'];
+  const destinations = ['All', ...new Set(buddies.map(b => b.destination))];
 
-  useEffect(() => {
+  const fetchBuddies = () => {
     fetch('/api/buddies')
       .then(res => res.json())
       .then(data => {
@@ -20,6 +20,24 @@ export default function TravelBuddy() {
         console.error('Error fetching buddies:', err);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchBuddies();
+  }, []);
+
+  // Sync with Hero search events to focus the filter and fetch any newly generated buddies
+  useEffect(() => {
+    const handlePlannerUpdate = () => {
+      const savedDest = localStorage.getItem('hero_destination');
+      if (savedDest) {
+        const formatted = savedDest.charAt(0).toUpperCase() + savedDest.slice(1).toLowerCase();
+        setSelectedDest(formatted);
+      }
+      fetchBuddies();
+    };
+    window.addEventListener('heroPlannerUpdated', handlePlannerUpdate);
+    return () => window.removeEventListener('heroPlannerUpdated', handlePlannerUpdate);
   }, []);
 
   const handleConnect = (id) => {

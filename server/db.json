@@ -95,6 +95,38 @@
       ],
       "liked": false,
       "connected": true
+    },
+    {
+      "name": "Anjali Goel",
+      "age": 23,
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      "destination": "Paris",
+      "match": 99,
+      "bio": "Heading to Paris! Looking for chill buddies to split cafe tabs, rent transport, and explore offbeat viewpoints. Let's make memories!",
+      "interests": [
+        "Heritage",
+        "Sketching",
+        "Street Food"
+      ],
+      "liked": false,
+      "connected": false,
+      "id": 7
+    },
+    {
+      "name": "Vikram Roy",
+      "age": 25,
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+      "destination": "Paris",
+      "match": 90,
+      "bio": "Heading to Paris! Looking for chill buddies to split cafe tabs, rent transport, and explore offbeat viewpoints. Let's make memories!",
+      "interests": [
+        "Trekking",
+        "Campfires",
+        "Photography"
+      ],
+      "liked": false,
+      "connected": false,
+      "id": 8
     }
   ],
   "posts": [
@@ -346,7 +378,7 @@
       ]
     },
     "Rafiganj": {
-      "budgetLimit": 40000,
+      "budgetLimit": 15000,
       "budgetSpent": 5000,
       "vibeMood": "Awesome",
       "weather": {
@@ -388,6 +420,44 @@
           "category": "Extra"
         }
       ]
+    },
+    "Paris": {
+      "budgetLimit": 15000,
+      "budgetSpent": 0,
+      "vibeMood": "Chill",
+      "weather": {
+        "temp": "21°C",
+        "condition": "Light Rain"
+      },
+      "safety": {
+        "status": "Clear",
+        "desc": "Standard metro lines active. Keep belongings secure.",
+        "type": "ok"
+      },
+      "timeline": [
+        {
+          "day": "Day 1",
+          "title": "Eiffel Tower & Seine Cruise",
+          "activity": "Check in, head to Trocadéro for photos, take a late evening river cruise.",
+          "time": "06:00 PM",
+          "alert": null
+        },
+        {
+          "day": "Day 2",
+          "title": "Louvre Museum & Montmartre Tour",
+          "activity": "Pre-book Louvre tickets, visit Mona Lisa, and walk up to Sacré-Cœur basilica for sunset.",
+          "time": "09:30 AM",
+          "alert": "Crowded area warning: Watch out for pickpockets near Montmartre stairs"
+        },
+        {
+          "day": "Day 3",
+          "title": "Champs-Élysées & Arc de Triomphe",
+          "activity": "Walk the famous avenue, climb Arc de Triomphe, eat French macarons at Ladurée.",
+          "time": "10:00 AM",
+          "alert": null
+        }
+      ],
+      "recentExpenses": []
     }
   }
 }
