@@ -34,7 +34,13 @@ export default function Login({ onNavigate, onLoginSuccess }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        const text = await response.text();
+        data = text ? JSON.parse(text) : {};
+      } catch (parseErr) {
+        throw new Error('Could not connect to the backend server. Please verify the API server is running on port 5000.');
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
@@ -46,7 +52,11 @@ export default function Login({ onNavigate, onLoginSuccess }) {
       // Callback to update parent state
       onLoginSuccess(data.user);
     } catch (err) {
-      setError(err.message);
+      if (err.message === 'Failed to fetch') {
+        setError('Network error: Could not reach the server. Please verify the backend server is running on http://localhost:5000.');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
