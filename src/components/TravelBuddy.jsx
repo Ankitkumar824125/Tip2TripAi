@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Search, MapPin, Sparkles, MessageCircle, Heart, UserCheck } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function TravelBuddy() {
   const [selectedDest, setSelectedDest] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,7 +12,7 @@ export default function TravelBuddy() {
   const destinations = ['All', ...new Set(buddies.map(b => b.destination))];
 
   const fetchBuddies = () => {
-    fetch('/api/buddies')
+    fetch(`${API_URL}/api/buddies`)
       .then(res => res.json())
       .then(data => {
         setBuddies(data);
@@ -41,7 +43,7 @@ export default function TravelBuddy() {
   }, []);
 
   const handleConnect = (id) => {
-    fetch(`/api/buddies/${id}/connect`, { method: 'POST' })
+    fetch(`${API_URL}/api/buddies/${id}/connect`, { method: 'POST' })
       .then(res => res.json())
       .then(updatedBuddy => {
         setBuddies(buddies.map(b => b.id === id ? updatedBuddy : b));
@@ -50,7 +52,7 @@ export default function TravelBuddy() {
   };
 
   const handleLike = (id) => {
-    fetch(`/api/buddies/${id}/like`, { method: 'POST' })
+    fetch(`${API_URL}/api/buddies/${id}/like`, { method: 'POST' })
       .then(res => res.json())
       .then(updatedBuddy => {
         setBuddies(buddies.map(b => b.id === id ? updatedBuddy : b));

@@ -38,7 +38,8 @@ export default function Signup({ onNavigate, onSignupSuccess }) {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/signup', {
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ export default function Signup({ onNavigate, onSignupSuccess }) {
       }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+        throw new Error(data.error || `Connection error (status ${response.status}). Please verify the API server is running on port 5000.`);
       }
 
       // Store session token

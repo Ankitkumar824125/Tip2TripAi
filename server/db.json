@@ -13,8 +13,8 @@
         "Surfing",
         "Nightlife"
       ],
-      "liked": true,
-      "connected": true
+      "liked": false,
+      "connected": false
     },
     {
       "id": 2,
@@ -78,7 +78,7 @@
         "Scuba Diving"
       ],
       "liked": false,
-      "connected": true
+      "connected": false
     },
     {
       "id": 6,
@@ -186,7 +186,7 @@
   "trips": {
     "Goa": {
       "budgetLimit": 40000,
-      "budgetSpent": 17200,
+      "budgetSpent": 17207,
       "vibeMood": "Chill",
       "weather": {
         "temp": "31°C",
@@ -222,6 +222,11 @@
       ],
       "recentExpenses": [
         {
+          "title": "lunch",
+          "amount": 7,
+          "category": "Extra"
+        },
+        {
           "title": "Lunch at shacks",
           "amount": 1200,
           "category": "Extra"
@@ -244,7 +249,7 @@
       ]
     },
     "Kasol": {
-      "budgetLimit": 30000,
+      "budgetLimit": 40000,
       "budgetSpent": 12000,
       "vibeMood": "Chill",
       "weather": {
@@ -293,7 +298,7 @@
       ]
     },
     "Leh": {
-      "budgetLimit": 50000,
+      "budgetLimit": 40000,
       "budgetSpent": 20000,
       "vibeMood": "Chill",
       "weather": {
@@ -514,6 +519,26 @@
       "name": "Test User",
       "email": "testuser123@example.com",
       "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+      "bio": "Traveler, tribe member, and wanderer.",
+      "phone": "",
+      "location": ""
+    },
+    {
+      "id": 5,
+      "name": "Test User",
+      "email": "testuser@example.com",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+      "bio": "Traveler, tribe member, and wanderer.",
+      "phone": "",
+      "location": ""
+    },
+    {
+      "id": 6,
+      "name": "abhay",
+      "email": "abhay1119@gmail.com",
+      "password": "klrahul",
       "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
       "bio": "Traveler, tribe member, and wanderer.",
       "phone": "",

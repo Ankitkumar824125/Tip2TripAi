@@ -41,7 +41,8 @@ export default function Profile({ user, onUpdateSuccess }) {
 
     try {
       const token = localStorage.getItem('tip2trip_token');
-      const response = await fetch('/api/auth/profile', {
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_URL}/api/auth/profile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

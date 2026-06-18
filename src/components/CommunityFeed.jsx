@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Heart, MessageSquare, Send, Image, Check } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function CommunityFeed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -9,7 +11,7 @@ export default function CommunityFeed() {
   const [successToast, setSuccessToast] = useState(false);
 
   useEffect(() => {
-    fetch('/api/posts')
+    fetch(`${API_URL}/api/posts`)
       .then(res => res.json())
       .then(data => {
         setPosts(data);
@@ -22,7 +24,7 @@ export default function CommunityFeed() {
   }, []);
 
   const handleLike = (id) => {
-    fetch(`/api/posts/${id}/like`, { method: 'POST' })
+    fetch(`${API_URL}/api/posts/${id}/like`, { method: 'POST' })
       .then(res => res.json())
       .then(updatedPost => {
         setPosts(posts.map(post => post.id === id ? updatedPost : post));
@@ -34,7 +36,7 @@ export default function CommunityFeed() {
     e.preventDefault();
     if (newPostContent.trim() === '') return;
 
-    fetch('/api/posts', {
+    fetch(`${API_URL}/api/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

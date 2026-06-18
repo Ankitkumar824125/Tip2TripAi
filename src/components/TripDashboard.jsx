@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { CloudRain, Sun, CloudSun, AlertTriangle, ShieldCheck, Plus, Smile, Meh, Frown, Sparkles, PlaneTakeoff } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function TripDashboard() {
   const [activeDestination, setActiveDestination] = useState('Goa');
   const [activeDate, setActiveDate] = useState('');
@@ -34,7 +36,7 @@ export default function TripDashboard() {
     Promise.resolve().then(() => {
       if (isMounted) setLoading(true);
     });
-    fetch(`/api/trips/${activeDestination}?budget=${activeBudget}`)
+    fetch(`${API_URL}/api/trips/${activeDestination}?budget=${activeBudget}`)
       .then(res => res.json())
       .then(data => {
         if (isMounted) {
@@ -55,7 +57,7 @@ export default function TripDashboard() {
     e.preventDefault();
     const parsedAmount = parseFloat(expenseAmount);
     if (!isNaN(parsedAmount) && parsedAmount > 0 && expenseTitle.trim() !== '') {
-      fetch(`/api/trips/${activeDestination}/expenses`, {
+      fetch(`${API_URL}/api/trips/${activeDestination}/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ export default function TripDashboard() {
   };
 
   const handleSetVibeMood = (mood) => {
-    fetch(`/api/trips/${activeDestination}/mood`, {
+    fetch(`${API_URL}/api/trips/${activeDestination}/mood`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

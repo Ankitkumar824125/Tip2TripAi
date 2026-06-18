@@ -35,7 +35,8 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('tip2trip_token');
     if (token) {
-      fetch('/api/auth/me', {
+      const API_URL = import.meta.env.VITE_API_URL || '';
+      fetch(`${API_URL}/api/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

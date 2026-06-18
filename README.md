@@ -1,4 +1,28 @@
-# React + Vite
+# Tip2Trip AI Planner
+
+Welcome to Tip2Trip! This project consists of a React/Vite frontend and a Node.js/Express backend API server.
+
+## How to Run the Application
+
+To run the application locally, you must start both the backend API server and the frontend development server:
+
+### 1. Start the Backend API Server
+In a new terminal window, run:
+```bash
+npm run server
+```
+This runs the backend Express server on [http://localhost:5000](http://localhost:5000).
+
+### 2. Start the Frontend Development Server
+In your main terminal, run:
+```bash
+npm run dev
+```
+This runs the React/Vite development server on [http://localhost:5173](http://localhost:5173).
+
+---
+
+## React + Vite Template Instructions
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
